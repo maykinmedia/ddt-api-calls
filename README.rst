@@ -4,19 +4,19 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to ddt_api_calls's documentation!
-=================================================
+Welcome to ddt-api-calls's documentation!
+=========================================
 
 :Version: 0.1.0
-:Source: https://github.com/maykinmedia/ddt_api_calls
-:Keywords: ``<keywords>``
-:PythonVersion: 3.7
+:Source: https://github.com/maykinmedia/ddt-api-calls
+:Keywords: django, debug, debug_toolbar, requests, api
+:PythonVersion: 3.8
 
 |build-status| |coverage| |black|
 
 |python-versions| |django-versions| |pypi-version|
 
-<One liner describing the project>
+A Django Debug Toolbar pannel to track calls made with requests library
 
 .. contents::
 
@@ -25,8 +25,9 @@ Welcome to ddt_api_calls's documentation!
 Features
 ========
 
-* ...
-* ...
+* Track (API) calls made with the requests library 
+* Display individual request method, path and duration
+* Display total number of calls and total duration start-end
 
 Installation
 ============
@@ -34,7 +35,7 @@ Installation
 Requirements
 ------------
 
-* Python 3.7 or above
+* Python 3.6 or above
 * setuptools 30.3.0 or above
 * Django 2.2 or newer
 
@@ -44,29 +45,29 @@ Install
 
 .. code-block:: bash
 
-    pip install ddt_api_calls
+    pip install ddt-api-calls
 
 
 Usage
 =====
 
-<document or refer to docs>
+TODO
 
 
 
-.. |build-status| image:: https://travis-ci.org/maykinmedia/ddt_api_calls.svg?branch=master
-    :target: https://travis-ci.org/maykinmedia/ddt_api_calls
+.. |build-status| image:: https://travis-ci.org/maykinmedia/ddt-api-calls.svg?branch=master
+    :target: https://travis-ci.org/maykinmedia/ddt-api-calls
 
-.. |coverage| image:: https://codecov.io/gh/maykinmedia/ddt_api_calls/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/maykinmedia/ddt_api_calls
+.. |coverage| image:: https://codecov.io/gh/maykinmedia/ddt-api-calls/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/maykinmedia/ddt-api-calls
     :alt: Coverage status
 
 .. |black| image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
 
-.. |python-versions| image:: https://img.shields.io/pypi/pyversions/ddt_api_calls.svg
+.. |python-versions| image:: https://img.shields.io/pypi/pyversions/ddt-api-calls.svg
 
-.. |django-versions| image:: https://img.shields.io/pypi/djversions/ddt_api_calls.svg
+.. |django-versions| image:: https://img.shields.io/pypi/djversions/ddt-api-calls.svg
 
-.. |pypi-version| image:: https://img.shields.io/pypi/v/ddt_api_calls.svg
-    :target: https://pypi.org/project/ddt_api_calls/
+.. |pypi-version| image:: https://img.shields.io/pypi/v/ddt-api-calls.svg
+    :target: https://pypi.org/project/ddt-api-calls/
