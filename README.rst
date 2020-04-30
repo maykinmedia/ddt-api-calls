@@ -25,7 +25,7 @@ A Django Debug Toolbar pannel to track calls made with requests library
 Features
 ========
 
-* Track (API) calls made with the requests library 
+* Track (API) calls made with the requests library
 * Display individual request method, path and duration
 * Display total number of calls and total duration start-end
 
@@ -48,11 +48,14 @@ Install
     pip install ddt-api-calls
 
 
+1. Add ``ddt_api_calls`` to ``INSTALLED_APPS``.
+2. Add ``ddt_api_calls.panels.APICallsPanel`` to the ``DEBUG_TOOLBAR_PANELS`` setting.
+
+
 Usage
 =====
 
-TODO
-
+Make your usual requests and see the data in the panels :-)
 
 
 .. |build-status| image:: https://travis-ci.org/maykinmedia/ddt-api-calls.svg?branch=master
