@@ -149,7 +149,27 @@ class APICallsPanel(Panel):
         ).format(n=num_calls, duration=total_time)
 
     def generate_stats(self, request, response):
-        requests = self.mocker.request_history
+        requests = sorted(
+            self.mocker.request_history, key=lambda req: (req.timing[0], req.timing[1]),
+        )
+
+        if requests:
+            min_start = min(req.timing[0] for req in requests)
+            max_end = max(req.timing[1] for req in requests)
+            total_time = max_end - min_start
+
+            # annotate each request with 'idle' and 'wait'
+            for request in requests:
+                request.idle = round(
+                    ((request.timing[0] - min_start) / total_time) * 100, 2
+                )
+                request.wait = round(
+                    ((request.timing[1] - request.timing[0]) / total_time) * 100, 2
+                )
+                request.tail = 100 - request.idle - request.wait
+        else:
+            total_time = 0
+
         stats = {
             "requests": requests,
         }
