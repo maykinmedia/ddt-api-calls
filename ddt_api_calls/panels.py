@@ -11,6 +11,54 @@ from requests_mock.mocker import _original_send
 # API calls made.
 
 
+def extract_intervals(request_history):
+    """
+    Extract the continuous (start, end) intervals during which network IO happend.
+
+    Summing the duration of those intervals gives the total API call time as perceived
+    by the end-user (taking into account parallel requests using concurrency features).
+    """
+    if not request_history:
+        return []
+
+    # first - sort by request start time and end time, this allows us to order the
+    # requests on the actual timeline.
+    timings = sorted(
+        [req.timing for req in request_history],
+        key=lambda timing: (timing[0], timing[1]),
+    )
+
+    distinct_intervals = []
+    min_start, max_end = timings[0][:2]
+
+    for timing in timings:
+        start, end = timing[0], timing[1]
+        if start <= max_end and end > max_end:
+            max_end = timing[1]
+
+        if start > max_end:
+            distinct_intervals.append((min_start, max_end))
+            min_start, max_end = timing[:2]
+
+    # last loop iteration doesn't append distinct interval
+    distinct_intervals.append((min_start, max_end))
+
+    return distinct_intervals
+
+
+def calculate_total_time(request_history) -> int:
+    distinct_intervals = extract_intervals(request_history)
+
+    if not distinct_intervals:
+        return 0
+
+    total_time = 0
+    for interval in distinct_intervals:
+        total_time += interval[1] - interval[0]
+
+    return int(total_time * 1000)
+
+
 class PanelMocker(requests_mock.Mocker):
     def start(self):
         """Start mocking requests.
@@ -93,14 +141,7 @@ class APICallsPanel(Panel):
     @property
     def nav_subtitle(self) -> str:
         num_calls = len(self.mocker.request_history)
-
-        if num_calls:
-            min_start = min(req.timing[0] for req in self.mocker.request_history)
-            max_end = max(req.timing[1] for req in self.mocker.request_history)
-            total_time = int((max_end - min_start) * 1000)
-        else:
-            total_time = 0
-
+        total_time = calculate_total_time(self.mocker.request_history)
         return ngettext(
             "1 API call made in {duration}ms",
             "{n} API calls made in {duration}ms",
