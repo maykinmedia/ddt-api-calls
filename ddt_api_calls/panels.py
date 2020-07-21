@@ -1,10 +1,9 @@
-import time
-
 from django.utils.translation import gettext_lazy as _, ngettext
 
 import requests
 import requests_mock
 from debug_toolbar.panels import Panel
+from requests.sessions import preferred_clock
 from requests_mock import adapter, exceptions
 from requests_mock.mocker import _original_send
 
@@ -18,6 +17,9 @@ class PanelMocker(requests_mock.Mocker):
 
         Install the adapter and the wrappers required to intercept requests.
         """
+        # attribute changed in 1.8.0
+        real_http = self.real_http if hasattr(self, "real_http") else self._real_http
+
         if self._last_send:
             raise RuntimeError("Mocker has already been started")
 
@@ -40,12 +42,12 @@ class PanelMocker(requests_mock.Mocker):
             # function so that our most recently patched send call ends up
             # putting in the most recent adapter. It feels funny, but it works.
 
-            start = time.time()
+            start = preferred_clock()
 
             try:
                 return _original_send(session, request, **kwargs)
             except exceptions.NoMockAddress:
-                if not self._real_http:
+                if not real_http:
                     raise
             except adapter._RunRealHTTP:
                 # this mocker wants you to run the request through the real
@@ -63,9 +65,9 @@ class PanelMocker(requests_mock.Mocker):
             else:
                 req.status_code = response.status_code
             finally:
-                end = time.time()
-                duration = (end - start) * 1000
-                req.timing = (start, end, int(duration))
+                duration = response.elapsed.total_seconds()
+                end = start + duration  # approximate
+                req.timing = (start, end, int(duration * 1000))
             return response
 
         requests.Session.send = _fake_send
