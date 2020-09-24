@@ -14,7 +14,9 @@
             {% for request in requests %}
                 <tr class="{% cycle 'djDebugOdd' 'djDebugEven' %}">
                     <td>{{ request.method }}</td>
-                    <td>{{ request.url }}</td>
+                    <td {% if request in duplicated %}style="color: red;" title="{% trans 'Duplicated!' %}"{% endif %}>
+                        {{ request.url }}
+                    </td>
                     <td>
                         <div style="display: flex; align-item: flex-start; justify-content: center;">
                             <div style="border: solid 1px black; border-right: none; height: 8px; width: {{ request.idle|unlocalize }}%;"></div>

@@ -153,8 +153,16 @@ class APICallsPanel(Panel):
 
     def generate_stats(self, request, response):
         requests = sorted(
-            self.mocker.request_history, key=lambda req: (req.timing[0], req.timing[1]),
+            self.mocker.request_history,
+            key=lambda req: (req.timing[0], req.timing[1]),
         )
+
+        unique_keys = [(request.method, request.url) for request in requests]
+        duplicated = [
+            request
+            for request in requests
+            if unique_keys.count((request.method, request.url)) > 1
+        ]
 
         if requests:
             min_start = min(req.timing[0] for req in requests)
@@ -175,5 +183,6 @@ class APICallsPanel(Panel):
 
         stats = {
             "requests": requests,
+            "duplicated": duplicated,
         }
         self.record_stats(stats)
