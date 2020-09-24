@@ -109,11 +109,14 @@ class PanelMocker(requests_mock.Mocker):
             try:
                 response = _original_send(session, request, **kwargs)
             except Exception:
+                response = None
                 raise
             else:
                 req.status_code = response.status_code
             finally:
-                duration = response.elapsed.total_seconds()
+                duration = (
+                    response.elapsed.total_seconds() if response is not None else 0
+                )
                 end = start + duration  # approximate
                 req.timing = (start, end, int(duration * 1000))
             return response
