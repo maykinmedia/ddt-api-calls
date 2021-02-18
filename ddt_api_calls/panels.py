@@ -169,15 +169,16 @@ class APICallsPanel(Panel):
             max_end = max(req.timing[1] for req in requests)
             total_time = max_end - min_start
 
-            # annotate each request with 'idle' and 'wait'
-            for request in requests:
-                request.idle = round(
-                    ((request.timing[0] - min_start) / total_time) * 100, 2
-                )
-                request.wait = round(
-                    ((request.timing[1] - request.timing[0]) / total_time) * 100, 2
-                )
-                request.tail = 100 - request.idle - request.wait
+            if total_time > 0:
+                # annotate each request with 'idle' and 'wait'
+                for request in requests:
+                    request.idle = round(
+                        ((request.timing[0] - min_start) / total_time) * 100, 2
+                    )
+                    request.wait = round(
+                        ((request.timing[1] - request.timing[0]) / total_time) * 100, 2
+                    )
+                    request.tail = 100 - request.idle - request.wait
         else:
             total_time = 0
 
