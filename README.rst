@@ -7,7 +7,7 @@
 Welcome to ddt-api-calls's documentation!
 =========================================
 
-:Version: 0.3.1
+:Version: 0.3.2
 :Source: https://github.com/maykinmedia/ddt-api-calls
 :Keywords: django, debug, debug_toolbar, requests, api
 :PythonVersion: 3.8
@@ -36,7 +36,7 @@ Requirements
 ------------
 
 * Python 3.6 or above
-* setuptools 30.3.1 or above
+* setuptools 30.3.2 or above
 * Django 2.2 or newer
 
 
